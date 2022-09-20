@@ -1,6 +1,7 @@
 package cfsecurity
 
 import (
+	"code.cloudfoundry.org/cli/api/cloudcontroller/ccv3"
 	"fmt"
 
 	"github.com/hashicorp/go-uuid"
@@ -86,7 +87,7 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	secGroups, err := manager.client.ListSecGroups()
+	secGroups, err := manager.client.GetSecGroups([]ccv3.Query{}, 0)
 	if err != nil {
 		return err
 	}
@@ -95,8 +96,9 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 	// check if force and if user is not an admin
 	if d.Get("force").(bool) && !userIsAdmin {
 		finalBinds := make([]map[string]interface{}, 0)
-		for _, secGroup := range secGroups.Resources {
-			for _, space := range secGroup.Relationships.Running_spaces.Data {
+		for i, secGroup := range secGroups.Resources {
+			_ = manager.client.AddSecGroupRelationShips(&secGroups.Resources[i])
+			for _, space := range secGroups.Resources[i].Relationships.RunningSpaces.Data {
 				finalBinds = append(finalBinds, map[string]interface{}{
 					"asg_id":   secGroup.GUID,
 					"space_id": space.GUID,
@@ -116,7 +118,7 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 		if asgIDTf != secGroup.GUID {
 			return false
 		}
-		spaces, _ := manager.client.GetSecGroupSpaces(secGroup.GUID)
+		spaces, _ := manager.client.GetSecGroupSpaces(&secGroup)
 		return isInSlice(spaces.Resources, func(object interface{}) bool {
 			space := object.(client.Space)
 			return space.GUID == spaceIDTf

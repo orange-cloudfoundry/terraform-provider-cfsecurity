@@ -81,7 +81,7 @@ func resourceEntitleAsgRead(d *schema.ResourceData, meta interface{}) error {
 		return err
 	}
 
-	entitlements, err := manager.client.ListSecGroupEntitlements()
+	entitlements, err := manager.client.GetSecGroupEntitlements()
 	if err != nil {
 		return err
 	}
