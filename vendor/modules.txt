@@ -355,7 +355,7 @@ github.com/oklog/run
 ## explicit; go 1.18
 # github.com/onsi/gomega v1.20.2
 ## explicit; go 1.18
-# github.com/orange-cloudfoundry/cf-security-entitlement v0.31.0
+# github.com/orange-cloudfoundry/cf-security-entitlement v0.32.1
 ## explicit; go 1.18
 github.com/orange-cloudfoundry/cf-security-entitlement/client
 github.com/orange-cloudfoundry/cf-security-entitlement/model
@@ -448,7 +448,7 @@ golang.org/x/crypto/openpgp/s2k
 golang.org/x/crypto/pbkdf2
 golang.org/x/crypto/scrypt
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.0.0-20220919232410-f2f64ebce3c1
+# golang.org/x/net v0.0.0-20220921203646-d300de134e69
 ## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
