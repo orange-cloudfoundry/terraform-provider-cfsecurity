@@ -7,6 +7,7 @@ import (
 	"github.com/hashicorp/go-uuid"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
+	"github.com/thoas/go-funk"
 )
 
 func resourceBindAsg() *schema.Resource {
@@ -97,11 +98,21 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 	if d.Get("force").(bool) && !userIsAdmin {
 		finalBinds := make([]map[string]interface{}, 0)
 		for i, secGroup := range secGroups.Resources {
-			_ = manager.client.AddSecGroupRelationShips(&secGroups.Resources[i])
-			for _, space := range secGroups.Resources[i].Relationships.RunningSpaces.Data {
+			secGroupSpaceBindings := make([]string, 0)
+			for _, space := range secGroups.Resources[i].Relationships.Running_Spaces.Data {
+				if !funk.ContainsString(secGroupSpaceBindings, space.GUID) {
+					secGroupSpaceBindings = append(secGroupSpaceBindings, space.GUID)
+				}
+			}
+			for _, space := range secGroups.Resources[i].Relationships.Staging_Spaces.Data {
+				if !funk.ContainsString(secGroupSpaceBindings, space.GUID) {
+					secGroupSpaceBindings = append(secGroupSpaceBindings, space.GUID)
+				}
+			}
+			for _, spaceGUID := range secGroupSpaceBindings {
 				finalBinds = append(finalBinds, map[string]interface{}{
 					"asg_id":   secGroup.GUID,
-					"space_id": space.GUID,
+					"space_id": spaceGUID,
 				})
 			}
 		}
