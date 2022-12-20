@@ -349,7 +349,7 @@ github.com/mitchellh/reflectwalk
 # github.com/oklog/run v1.1.0
 ## explicit; go 1.13
 github.com/oklog/run
-# github.com/orange-cloudfoundry/cf-security-entitlement v0.46.0
+# github.com/orange-cloudfoundry/cf-security-entitlement v0.46.1
 ## explicit; go 1.19
 github.com/orange-cloudfoundry/cf-security-entitlement/client
 github.com/orange-cloudfoundry/cf-security-entitlement/model
