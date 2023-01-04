@@ -10,7 +10,7 @@ require (
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/orange-cloudfoundry/cf-security-entitlement v0.46.1
-	github.com/thoas/go-funk v0.9.2
+	github.com/thoas/go-funk v0.9.3
 )
 
 require (
