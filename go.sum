@@ -480,8 +480,8 @@ github.com/onsi/gomega v1.17.0/go.mod h1:HnhC7FXeEQY45zxNK3PPoIUhzk/80Xly9PcubAl
 github.com/onsi/gomega v1.19.0/go.mod h1:LY+I3pBVzYsTBU1AnDwOSxaYi9WoWiqgwooUqq9yPro=
 github.com/onsi/gomega v1.20.0/go.mod h1:DtrZpjmvpn2mPm4YWQa0/ALMDj9v4YxLgojwPeREyVo=
 github.com/onsi/gomega v1.24.1 h1:KORJXNNTzJXzu4ScJWssJfJMnJ+2QJqhoQSRwNlze9E=
-github.com/orange-cloudfoundry/cf-security-entitlement v0.49.0 h1:VeK9eVwMSci/xtqGH2vXI1ayFW3HUWSb6Hf/vulD9Zo=
-github.com/orange-cloudfoundry/cf-security-entitlement v0.49.0/go.mod h1:BkB+bfK13grMP0uskMGSisWAGRNqDidSzpqVuaMmLQE=
+github.com/orange-cloudfoundry/cf-security-entitlement v0.51.0 h1:DZylaClbcgmfdrAp7ykCgOdWFsCcwJocc+Iu4XAtl4E=
+github.com/orange-cloudfoundry/cf-security-entitlement v0.51.0/go.mod h1:Tgt90E+nARbvteypqffJsUzvAlDZmAWDSRFQ1ClL9JE=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
