@@ -20,8 +20,8 @@ cloud.google.com/go/storage
 cloud.google.com/go/storage/internal
 cloud.google.com/go/storage/internal/apiv2
 cloud.google.com/go/storage/internal/apiv2/stubs
-# code.cloudfoundry.org/bytefmt v0.0.0-20211005130812-5bb3c17173e5
-## explicit; go 1.16
+# code.cloudfoundry.org/bytefmt v0.0.0-20230406175530-3579ae0680eb
+## explicit; go 1.20
 code.cloudfoundry.org/bytefmt
 # code.cloudfoundry.org/cfnetworking-cli-api v0.0.0-20190103195135-4b04f26287a6
 ## explicit
@@ -80,8 +80,8 @@ code.cloudfoundry.org/cli/util/sorting
 code.cloudfoundry.org/cli/util/ui
 code.cloudfoundry.org/cli/util/unique
 code.cloudfoundry.org/cli/version
-# code.cloudfoundry.org/clock v1.0.0
-## explicit
+# code.cloudfoundry.org/clock v1.1.0
+## explicit; go 1.20
 code.cloudfoundry.org/clock
 # code.cloudfoundry.org/go-log-cache v1.0.1-0.20211011162012-ede82a99d3cc
 ## explicit; go 1.14
@@ -135,7 +135,7 @@ github.com/apparentlymart/go-textseg/v13/textseg
 # github.com/armon/go-radix v1.0.0
 ## explicit
 github.com/armon/go-radix
-# github.com/aws/aws-sdk-go v1.44.237
+# github.com/aws/aws-sdk-go v1.44.238
 ## explicit; go 1.11
 github.com/aws/aws-sdk-go/aws
 github.com/aws/aws-sdk-go/aws/arn
@@ -521,7 +521,7 @@ go.opencensus.io/trace
 go.opencensus.io/trace/internal
 go.opencensus.io/trace/propagation
 go.opencensus.io/trace/tracestate
-# golang.org/x/crypto v0.7.0
+# golang.org/x/crypto v0.8.0
 ## explicit; go 1.17
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
@@ -543,7 +543,7 @@ golang.org/x/crypto/scrypt
 golang.org/x/crypto/ssh
 golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 golang.org/x/crypto/ssh/terminal
-# golang.org/x/net v0.8.0
+# golang.org/x/net v0.9.0
 ## explicit; go 1.17
 golang.org/x/net/context
 golang.org/x/net/http/httpguts
@@ -554,7 +554,7 @@ golang.org/x/net/internal/socks
 golang.org/x/net/internal/timeseries
 golang.org/x/net/proxy
 golang.org/x/net/trace
-# golang.org/x/oauth2 v0.6.0
+# golang.org/x/oauth2 v0.7.0
 ## explicit; go 1.17
 golang.org/x/oauth2
 golang.org/x/oauth2/authhandler
@@ -816,7 +816,7 @@ k8s.io/klog/v2/internal/clock
 k8s.io/klog/v2/internal/dbg
 k8s.io/klog/v2/internal/serialize
 k8s.io/klog/v2/internal/severity
-# k8s.io/utils v0.0.0-20230313181309-38a27ef9d749
+# k8s.io/utils v0.0.0-20230406110748-d93618cff8a2
 ## explicit; go 1.18
 k8s.io/utils/clock
 k8s.io/utils/clock/testing
