@@ -14,7 +14,7 @@ require (
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.4.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
-	github.com/orange-cloudfoundry/cf-security-entitlement v0.65.0
+	github.com/orange-cloudfoundry/cf-security-entitlement v0.65.5
 	github.com/thoas/go-funk v0.9.3
 )
 
@@ -101,7 +101,7 @@ require (
 	github.com/rivo/uniseg v0.4.4 // indirect
 	github.com/sabhiram/go-gitignore v0.0.0-20180611051255-d3107576ba94 // indirect
 	github.com/shopspring/decimal v1.3.1 // indirect
-	github.com/sirupsen/logrus v1.9.0 // indirect
+	github.com/sirupsen/logrus v1.9.2 // indirect
 	github.com/spf13/afero v1.9.5 // indirect
 	github.com/spf13/cast v1.5.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
