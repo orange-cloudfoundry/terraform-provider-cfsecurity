@@ -11,7 +11,7 @@ exclude (
 
 require (
 	code.cloudfoundry.org/cli v0.0.0-20220602204915-eda2b7b2321c
-	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.4.0
+	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.5.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-sdk v1.17.2
 	github.com/orange-cloudfoundry/cf-security-entitlement v0.71.0
@@ -19,8 +19,8 @@ require (
 )
 
 require (
-	cloud.google.com/go v0.110.3 // indirect
-	cloud.google.com/go/compute v1.20.1 // indirect
+	cloud.google.com/go v0.110.7 // indirect
+	cloud.google.com/go/compute v1.23.0 // indirect
 	cloud.google.com/go/compute/metadata v0.2.3 // indirect
 	cloud.google.com/go/iam v1.1.1 // indirect
 	cloud.google.com/go/storage v1.31.0 // indirect
@@ -49,7 +49,7 @@ require (
 	github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f // indirect
 	github.com/charlievieth/fs v0.0.3 // indirect
 	github.com/cloudfoundry/bosh-cli v6.4.1+incompatible // indirect
-	github.com/cloudfoundry/bosh-utils v0.0.369 // indirect
+	github.com/cloudfoundry/bosh-utils v0.0.394 // indirect
 	github.com/cppforlife/go-patch v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.15.0 // indirect
@@ -63,7 +63,7 @@ require (
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/googleapis/enterprise-certificate-proxy v0.2.5 // indirect
 	github.com/googleapis/gax-go/v2 v2.11.0 // indirect
-	github.com/grpc-ecosystem/grpc-gateway/v2 v2.16.0 // indirect
+	github.com/grpc-ecosystem/grpc-gateway/v2 v2.18.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-getter v1.7.1 // indirect
@@ -84,7 +84,7 @@ require (
 	github.com/lunixbochs/vtclean v1.0.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.19 // indirect
-	github.com/mattn/go-runewidth v0.0.14 // indirect
+	github.com/mattn/go-runewidth v0.0.15 // indirect
 	github.com/mitchellh/cli v1.1.5 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
@@ -116,7 +116,8 @@ require (
 	go.opencensus.io v0.24.0 // indirect
 	golang.org/x/crypto v0.13.0 // indirect
 	golang.org/x/net v0.15.0 // indirect
-	golang.org/x/oauth2 v0.9.0 // indirect
+	golang.org/x/oauth2 v0.12.0 // indirect
+	golang.org/x/sync v0.3.0 // indirect
 	golang.org/x/sys v0.12.0 // indirect
 	golang.org/x/term v0.12.0 // indirect
 	golang.org/x/text v0.13.0 // indirect
@@ -124,10 +125,10 @@ require (
 	golang.org/x/xerrors v0.0.0-20220907171357-04be3eba64a2 // indirect
 	google.golang.org/api v0.129.0 // indirect
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/genproto v0.0.0-20230629202037-9506855d4529 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20230629202037-9506855d4529 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20230629202037-9506855d4529 // indirect
-	google.golang.org/grpc v1.56.1 // indirect
+	google.golang.org/genproto v0.0.0-20230911183012-2d3300fd4832 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20230911183012-2d3300fd4832 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20230911183012-2d3300fd4832 // indirect
+	google.golang.org/grpc v1.58.0 // indirect
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
