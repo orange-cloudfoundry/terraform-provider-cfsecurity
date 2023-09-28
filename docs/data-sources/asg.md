@@ -7,7 +7,7 @@ description: Get information on a Cloud Foundry Application Security Group from 
 
 # cfsecurity\_asg
 
-Retrieve a security group id by its name (useful only for org managers who wants to use terraform).
+Retrieve a security group id by its name (useful only for org managers wanting to use terraform).
 
 ## Example Usage
 

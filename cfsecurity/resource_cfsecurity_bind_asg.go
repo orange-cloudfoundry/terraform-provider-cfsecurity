@@ -116,8 +116,7 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 				})
 			}
 		}
-		d.Set("bind", finalBinds)
-		return nil
+		return d.Set("bind", finalBinds)
 	}
 
 	secGroupsTf := getListOfStructs(d.Get("bind"))
@@ -135,8 +134,7 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 			return space.GUID == spaceIDTf
 		})
 	})
-	d.Set("bind", finalBinds)
-	return nil
+	return d.Set("bind", finalBinds)
 }
 
 func resourceBindAsgUpdate(d *schema.ResourceData, meta interface{}) error {

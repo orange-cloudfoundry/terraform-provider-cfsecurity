@@ -7,7 +7,8 @@ description: Entitle a security group to an org. Resource only manage entitlemen
 
 # cfsecurity\_entitle\_asg
 
-Entitle a security group to an org. Resource only manage entitlement previously set in resource. If entitlements has been added by an other way the provider will not override it.
+Entitle a security group to an org. Resource only manage entitlement previously set in resource.
+If entitlements has been added by another way the provider will not override it.
 
 ## Example Usage
 
@@ -31,7 +32,7 @@ resource "cfsecurity_entitle_asg" "my-entitlements" {
 The following arguments are supported:
 
 * `entitle` - (Required) A list of entitlements.
-    - `asg_id` - (Required, String) a security group to be entitle on the org
+    - `asg_id` - (Required, String) a security group to be entitled on the org
     - `org_id` - (Required, String) an organisation guid
 
 ## Attributes Reference

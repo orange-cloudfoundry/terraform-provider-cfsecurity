@@ -2,7 +2,7 @@
 layout: "cfsecurity"
 page_title: "Provider: Cloud Foundry security entitlement"
 sidebar_current: "docs-cfsecurity-index"
-description: |- Provider for using cloud foundry security entitlement api.
+description: Provider for using cloud foundry security entitlement API.
 ---
 
 # Cloud Foundry security entitlement Provider
@@ -32,7 +32,8 @@ The following arguments are supported:
 
 * `cf_security_url` - (Optional) This is by default set to `https://cfsecurity.[your domain]` (e.g.: https://cfsecurity.local.pcfdev.io). This is the URL to cfsecurity server. Can be defined with the `CF_SECURITY_URL` shell environment variable.
 
-* `user` - (Optional) Cloud Foundry user. Defaults to "admin". This can also be specified with the `CF_USER` shell environment variable. Unless mentionned explicitly in a resource, CF admin permissions are not required.
+* `user` - (Optional) Cloud Foundry user. Defaults to "admin". This can also be specified with the `CF_USER` shell environment variable.
+  Unless mentioned explicitly in a resource, CF admin permissions are not required.
 
 * `password` - (Optional) Cloud Foundry user's password. This can also be specified with the `CF_PASSWORD` shell environment variable.
 

@@ -92,8 +92,7 @@ func resourceEntitleAsgRead(d *schema.ResourceData, meta interface{}) error {
 		return entitlementTf["asg_id"].(string) == entitlement.SecurityGroupGUID &&
 			entitlementTf["org_id"] == entitlement.OrganizationGUID
 	})
-	d.Set("entitle", finalEntitlements)
-	return nil
+	return d.Set("entitle", finalEntitlements)
 }
 
 func resourceEntitleAsgUpdate(d *schema.ResourceData, meta interface{}) error {
