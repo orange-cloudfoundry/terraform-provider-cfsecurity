@@ -3,6 +3,7 @@ module github.com/orange-cloudfoundry/terraform-provider-cfsecurity
 go 1.21
 
 // replace github.com/codahale/hdrhistogram => github.com/HdrHistogram/hdrhistogram-go v0.0.0-20210305173142-35c7773a578a
+replace github.com/imdario/mergo => dario.cat/mergo v0.3.16
 
 exclude (
 	github.com/sabhiram/go-gitignore v0.0.0-20210923224102-525f6e181f06
@@ -76,7 +77,7 @@ require (
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
 	github.com/hashicorp/yamux v0.1.1 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
-	github.com/imdario/mergo v0.3.16 // indirect
+	github.com/imdario/mergo v1.0.0 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
