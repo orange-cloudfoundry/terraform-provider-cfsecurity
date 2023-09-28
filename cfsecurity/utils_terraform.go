@@ -60,8 +60,8 @@ func getListMapChanges(old interface{}, new interface{}, match func(source, item
 	return remove, add
 }
 
-// return the intersection of 2 slices ([1, 1, 3, 4, 5, 6] & [2, 3, 6] >> [3, 6])
-// sources and items must be array of whatever and element type can be whatever and can be different
+// intersectSlices return the intersection of 2 slices ([1, 1, 3, 4, 5, 6] & [2, 3, 6] >> [3, 6])
+// sources and items must be an array of whatever and element type can be whatever and can be different
 // match function must return true if item and source given match
 func intersectSlices(sources interface{}, items interface{}, match func(source, item interface{}) bool) []interface{} {
 	sourceValue := reflect.ValueOf(sources)
@@ -84,7 +84,7 @@ func intersectSlices(sources interface{}, items interface{}, match func(source, 
 	return final
 }
 
-// Try to find in a list of whatever an element
+// isInSlice Try to find in a list of whatever an element
 func isInSlice(objects interface{}, match func(object interface{}) bool) bool {
 	objectsValue := reflect.ValueOf(objects)
 	for i := 0; i < objectsValue.Len(); i++ {

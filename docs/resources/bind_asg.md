@@ -7,7 +7,8 @@ description: Bind a security group to an org through cfsecurity server (useful o
 
 # cfsecurity\_bind\_asg
 
-Bind a security group to an org through cfsecurity server (useful only for org manager who wants to use terraform). Resource only manage entitlement previously set in resource when `force` is to `false`. If entitlements has been added by an other way the provider will not override it.
+Bind a security group to an org through cfsecurity server (useful only for org manager who wants to use terraform). Resource only manage entitlement previously set in resource when `force` is to `false`.
+If entitlements has been added by another way the provider will not override it.
 
 ## Example Usage
 
@@ -32,9 +33,9 @@ resource "cfsecurity_bind_asg" "my-bindings" {
 The following arguments are supported:
 
 * `bind` - (Required) A list of entitlements.
-    - `asg_id` - (Required, String) a security group to be entitle on the org
+    - `asg_id` - (Required, String) a security group to be entitled on the org
     - `space_id` - (Required, String) an organisation guid
-* `force` - (Optionnal, boolean) if set to true, resource will overrides security groups assigments for org manager.
+* `force` - (Optional, boolean) if set to true, resource will override security groups assignments for org manager.
 
 ## Attributes Reference
 
