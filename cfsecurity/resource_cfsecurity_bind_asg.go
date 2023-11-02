@@ -1,102 +1,183 @@
 package cfsecurity
 
 import (
-	"code.cloudfoundry.org/cli/api/cloudcontroller/ccv3"
+	"context"
 	"fmt"
 
+	"code.cloudfoundry.org/cli/api/cloudcontroller/ccv3"
+
+	clients "github.com/cloudfoundry-community/go-cf-clients-helper/v2"
 	"github.com/hashicorp/go-uuid"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
 	"github.com/thoas/go-funk"
 )
 
-func resourceBindAsg() *schema.Resource {
+type cfsecurityBindResource struct {
+	client *client.Client
+	config *clients.Config
+}
 
-	return &schema.Resource{
+var _ resource.Resource = &cfsecurityBindResource{}
+var _ resource.ResourceWithConfigure = &cfsecurityBindResource{}
+var _ resource.ResourceWithImportState = &cfsecurityBindResource{}
+var _ resource.ResourceWithValidateConfig = &cfsecurityBindResource{}
 
-		Create: resourceBindAsgCreate,
-		Read:   resourceBindAsgRead,
-		Update: resourceBindAsgUpdate,
-		Delete: resourceBindAsgDelete,
-		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
+func NewCFSecurityBindResource(config *clients.Config) resource.Resource {
+	return &cfsecurityBindResource{
+		config: config,
+	}
+}
+
+type cfsecurityBindResourceModel struct {
+	Id    types.String `tfsdk:"id"`
+	Bind  types.Set    `tfsdk:"bind"`
+	Force types.Bool   `tfsdk:"force"`
+}
+
+type bind struct {
+	AsgID   types.String `tfsdk:"asg_id"`
+	SpaceID types.String `tfsdk:"space_id"`
+}
+
+func (r *cfsecurityBindResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_bind_asg"
+}
+
+// Configure enables provider-level data or clients to be set in the
+// provider-defined DataSource type. It is separately executed for each
+// ReadDataSource RPC.
+func (r *cfsecurityBindResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
+
+	client, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = client
+}
+
+func (r *cfsecurityBindResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"force": schema.BoolAttribute{
+				Optional: true,
+			},
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 		},
-
-		Schema: map[string]*schema.Schema{
-			"bind": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Set: func(v interface{}) int {
-					elem := v.(map[string]interface{})
-					str := fmt.Sprintf("%s-%s",
-						elem["asg_id"],
-						elem["space_id"],
-					)
-					return StringHashCode(str)
-				},
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"asg_id": &schema.Schema{
-							Type:     schema.TypeString,
-							Required: true,
+		Blocks: map[string]schema.Block{
+			"bind": schema.SetNestedBlock{
+				NestedObject: schema.NestedBlockObject{
+					Attributes: map[string]schema.Attribute{
+						"asg_id": schema.StringAttribute{
+							Description: "The security group guid",
+							Required:    true,
 						},
-						"space_id": &schema.Schema{
-							Type:     schema.TypeString,
-							Required: true,
+						"space_id": schema.StringAttribute{
+							Description: "The space guid",
+							Required:    true,
 						},
 					},
 				},
 			},
-			"force": &schema.Schema{
-				Type:     schema.TypeBool,
-				Optional: true,
-			},
 		},
 	}
 }
 
-func resourceBindAsgCreate(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityBindResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan cfsecurityBindResourceModel
 
-	err := refreshTokenIfExpired(manager)
+	// Read Terraform plan data into the model
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	err := refreshTokenIfExpired(r.client, r.config)
 	if err != nil {
-		return err
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to refresh token: %s", err),
+		)
+		return
 	}
 
 	id, err := uuid.GenerateUUID()
 	if err != nil {
-		return err
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to generate uuid: %s", err),
+		)
+		return
 	}
 
-	for _, elem := range getListOfStructs(d.Get("bind")) {
-		err := manager.client.BindSecurityGroup(elem["asg_id"].(string), elem["space_id"].(string), manager.client.GetEndpoint())
+	var binds []bind
+	resp.Diagnostics.Append(plan.Bind.ElementsAs(ctx, &binds, false)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	for _, bind := range binds {
+		err = r.client.BindSecurityGroup(bind.AsgID.ValueString(), bind.SpaceID.ValueString(), r.client.GetEndpoint())
 		if err != nil {
-			return err
+			resp.Diagnostics.AddError(
+				"Client Error",
+				fmt.Sprintf("Unable to bind security group, got error: %s", err),
+			)
+			return
 		}
 	}
-	d.SetId(id)
-	return nil
+	plan.Id = types.StringValue(id)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityBindResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+	var state cfsecurityBindResourceModel
 
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
+	// Read Terraform prior state data into the model
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	secGroups, err := manager.client.GetSecGroups([]ccv3.Query{}, 0)
+	err := refreshTokenIfExpired(r.client, r.config)
 	if err != nil {
-		return err
+		return
 	}
 
-	userIsAdmin, _ := manager.client.CurrentUserIsAdmin()
+	secGroups, err := r.client.GetSecGroups([]ccv3.Query{}, 0)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to get security groups : %s", err),
+		)
+		return
+	}
+
+	userIsAdmin, _ := r.client.CurrentUserIsAdmin()
 	// check if force and if user is not an admin
-	if d.Get("force").(bool) && !userIsAdmin {
-		finalBinds := make([]map[string]interface{}, 0)
+	if state.Force.ValueBool() && !userIsAdmin {
+		finalBinds := make([]bind, 0)
 		for i, secGroup := range secGroups.Resources {
 			secGroupSpaceBindings := make([]string, 0)
 			for _, space := range secGroups.Resources[i].Relationships.Running_Spaces.Data {
@@ -110,80 +191,163 @@ func resourceBindAsgRead(d *schema.ResourceData, meta interface{}) error {
 				}
 			}
 			for _, spaceGUID := range secGroupSpaceBindings {
-				finalBinds = append(finalBinds, map[string]interface{}{
-					"asg_id":   secGroup.GUID,
-					"space_id": spaceGUID,
+				finalBinds = append(finalBinds, bind{
+					AsgID:   types.StringValue(secGroup.GUID),
+					SpaceID: types.StringValue(spaceGUID),
 				})
 			}
 		}
-		return d.Set("bind", finalBinds)
+
+		bindType := req.State.Schema.GetBlocks()["bind"].(schema.SetNestedBlock).NestedObject.Type()
+		binds, aErr := types.SetValueFrom(ctx, bindType, finalBinds)
+		if aErr.HasError() {
+			resp.Diagnostics.Append(aErr...)
+			return
+		}
+		state.Bind = binds
+
+		// Save updated data into Terraform state
+		resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
+		return
 	}
 
-	secGroupsTf := getListOfStructs(d.Get("bind"))
+	var secGroupsTf []bind
+	state.Bind.ElementsAs(ctx, &secGroupsTf, false)
+
 	finalBinds := intersectSlices(secGroupsTf, secGroups.Resources, func(source, item interface{}) bool {
-		secGroupTf := source.(map[string]interface{})
+		secGroupTf := source.(bind)
 		secGroup := item.(client.SecurityGroup)
-		asgIDTf := secGroupTf["asg_id"].(string)
-		spaceIDTf := secGroupTf["space_id"].(string)
+		asgIDTf := secGroupTf.AsgID.ValueString()
+		spaceIDTf := secGroupTf.SpaceID.ValueString()
 		if asgIDTf != secGroup.GUID {
 			return false
 		}
-		spaces, _ := manager.client.GetSecGroupSpaces(&secGroup)
+		spaces, _ := r.client.GetSecGroupSpaces(&secGroup)
 		return isInSlice(spaces.Resources, func(object interface{}) bool {
 			space := object.(client.Space)
 			return space.GUID == spaceIDTf
 		})
 	})
-	return d.Set("bind", finalBinds)
+
+	bindType := req.State.Schema.GetBlocks()["bind"].(schema.SetNestedBlock).NestedObject.Type()
+	binds, aErr := types.SetValueFrom(ctx, bindType, finalBinds)
+	if aErr.HasError() {
+		resp.Diagnostics.Append(aErr...)
+		return
+	}
+	state.Bind = binds
+
+	// Save updated data into Terraform state
+	resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 }
 
-func resourceBindAsgUpdate(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityBindResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state cfsecurityBindResourceModel
 
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
+	// Read Terraform plan data into the model
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	old, now := d.GetChange("bind")
-	remove, add := getListMapChanges(old, now, func(source, item map[string]interface{}) bool {
-		return source["asg_id"] == item["asg_id"] &&
-			source["space_id"] == item["space_id"]
-	})
+	err := refreshTokenIfExpired(r.client, r.config)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to refresh token: %s", err),
+		)
+		return
+	}
+
+	var planBinds, stateBinds []bind
+	plan.Bind.ElementsAs(ctx, &planBinds, false)
+	state.Bind.ElementsAs(ctx, &stateBinds, false)
+	remove, add := getListBindChanges(stateBinds, planBinds)
+
 	if len(remove) > 0 {
-		for _, bind := range remove {
-			err := manager.client.UnBindSecurityGroup(bind["asg_id"].(string), bind["space_id"].(string), manager.client.GetEndpoint())
+		for _, rBind := range remove {
+			err := r.client.UnBindSecurityGroup(rBind.AsgID.ValueString(), rBind.SpaceID.ValueString(), r.client.GetEndpoint())
 			if err != nil && !isNotFoundErr(err) {
-				return err
+				resp.Diagnostics.AddError(
+					"Client Error",
+					fmt.Sprintf("Unable to unbind security group, got error: %s", err),
+				)
+				return
 			}
 		}
-
 	}
 	if len(add) > 0 {
-		for _, bind := range add {
-			err := manager.client.BindSecurityGroup(bind["asg_id"].(string), bind["space_id"].(string), manager.client.GetEndpoint())
+		for _, aBind := range add {
+			err := r.client.BindSecurityGroup(aBind.AsgID.ValueString(), aBind.SpaceID.ValueString(), r.client.GetEndpoint())
 			if err != nil {
-				return err
+				resp.Diagnostics.AddError(
+					"Client Error",
+					fmt.Sprintf("Unable to bind security group, got error: %s", err),
+				)
+				return
 			}
 		}
 	}
 
-	return nil
+	// Save updated data into Terraform state
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func resourceBindAsgDelete(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityBindResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+	var state cfsecurityBindResourceModel
 
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
+	// Read Terraform prior state data into the model
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	for _, elem := range getListOfStructs(d.Get("bind")) {
-		err := manager.client.UnBindSecurityGroup(elem["asg_id"].(string), elem["space_id"].(string), manager.client.GetEndpoint())
+	err := refreshTokenIfExpired(r.client, r.config)
+	if err != nil {
+		resp.Diagnostics.AddError(
+			"Client Error",
+			fmt.Sprintf("Unable to refresh token: %s", err),
+		)
+		return
+	}
+
+	var binds []bind
+	state.Bind.ElementsAs(ctx, &binds, false)
+
+	for _, bind := range binds {
+		err := r.client.UnBindSecurityGroup(bind.AsgID.ValueString(), bind.SpaceID.ValueString(), r.client.GetEndpoint())
 		if err != nil && !isNotFoundErr(err) {
-			return err
+			resp.Diagnostics.AddError(
+				"Client Error",
+				fmt.Sprintf("Unable to unbind security group, got error: %s", err),
+			)
+			return
 		}
 	}
-	return nil
+}
+
+func (r *cfsecurityBindResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
+
+// Called during terraform validate through ValidateResourceConfig RPC
+// Validates the logic in the application block in the Schema
+func (r *cfsecurityBindResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var configData cfsecurityBindResourceModel
+
+	// Read Terraform configuration from the request into the model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+	if resp.Diagnostics.HasError() {
+		return
+	}
+
+	var binds []bind
+	configData.Bind.ElementsAs(ctx, &binds, false)
+	for _, bind := range binds {
+		if bind.AsgID.IsNull() || bind.SpaceID.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("bind"), "Attribute Error", "\"asg_id\" and \"space_id\" fields must be provided.")
+		}
+	}
 }
