@@ -122,7 +122,7 @@ func (p *CFSecurityProvider) Configure(ctx context.Context, req provider.Configu
 	if !isValid {
 		resp.Diagnostics.AddError(
 			"Client Error: Bad parameter",
-			fmt.Sprintf("User, password or endpoint is empty"),
+			"User, password or endpoint is empty",
 		)
 		return
 	}
