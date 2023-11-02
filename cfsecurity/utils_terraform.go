@@ -1,59 +1,36 @@
 package cfsecurity
 
 import (
-	"hash/crc32"
 	"net/http"
 	"reflect"
 
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
 )
 
-// getListOfStructs
-func getListOfStructs(v interface{}) []map[string]interface{} {
-	if vvSet, ok := v.(*schema.Set); ok {
-		v = vvSet.List()
-	}
-	vvv := []map[string]interface{}{}
-	for _, vv := range v.([]interface{}) {
-		vvv = append(vvv, vv.(map[string]interface{}))
-	}
-	return vvv
-}
+func getListBindChanges(old []bind, new []bind) (remove []bind, add []bind) {
 
-// getListChanges -
-func getListMapChanges(old interface{}, new interface{}, match func(source, item map[string]interface{}) bool) (remove []map[string]interface{}, add []map[string]interface{}) {
-	if vvSet, ok := old.(*schema.Set); ok {
-		old = vvSet.List()
-	}
-	if vvSet, ok := new.(*schema.Set); ok {
-		new = vvSet.List()
-	}
-	oldL := old.([]interface{})
-	newL := new.([]interface{})
-
-	for _, source := range oldL {
+	for _, source := range old {
 		toDelete := true
-		for _, item := range newL {
-			if match(source.(map[string]interface{}), item.(map[string]interface{})) {
+		for _, item := range new {
+			if source.AsgID == item.AsgID && source.SpaceID == item.SpaceID {
 				toDelete = false
 				break
 			}
 		}
 		if toDelete {
-			remove = append(remove, source.(map[string]interface{}))
+			remove = append(remove, source)
 		}
 	}
-	for _, source := range newL {
+	for _, source := range new {
 		toAdd := true
-		for _, item := range oldL {
-			if match(source.(map[string]interface{}), item.(map[string]interface{})) {
+		for _, item := range old {
+			if source.AsgID == item.AsgID && source.SpaceID == item.SpaceID {
 				toAdd = false
 				break
 			}
 		}
 		if toAdd {
-			add = append(add, source.(map[string]interface{}))
+			add = append(add, source)
 		}
 	}
 
@@ -101,16 +78,4 @@ func isNotFoundErr(err error) bool {
 		return httpErr.StatusCode == http.StatusNotFound
 	}
 	return false
-}
-
-func StringHashCode(s string) int {
-	v := int(crc32.ChecksumIEEE([]byte(s)))
-	if v >= 0 {
-		return v
-	}
-	if -v >= 0 {
-		return -v
-	}
-	// v == MinInt
-	return 0
 }

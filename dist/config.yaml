@@ -55,7 +55,7 @@ builds:
     gobinary: go
     command: build
     ldflags:
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}}
+      - -s -w -X github.com/prometheus/common/version.Version=terraform-provider-{{.Version}} -X main.commit={{.Commit}}
     flags:
       - -trimpath
     env:

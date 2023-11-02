@@ -1,48 +1,90 @@
 package cfsecurity
 
 import (
+	"context"
 	"fmt"
 
+	clients "github.com/cloudfoundry-community/go-cf-clients-helper/v2"
 	"github.com/hashicorp/go-uuid"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/orange-cloudfoundry/cf-security-entitlement/model"
+	"github.com/hashicorp/terraform-plugin-framework/path"
+	"github.com/hashicorp/terraform-plugin-framework/resource"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/types"
+	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
 )
 
-func resourceEntitleAsg() *schema.Resource {
+// Deprecated : entitlement will be removed
+type cfsecurityEntitleAsgResource struct {
+	client *client.Client
+	config *clients.Config
+}
 
-	return &schema.Resource{
+var _ resource.Resource = &cfsecurityEntitleAsgResource{}
+var _ resource.ResourceWithConfigure = &cfsecurityEntitleAsgResource{}
+var _ resource.ResourceWithImportState = &cfsecurityEntitleAsgResource{}
+var _ resource.ResourceWithValidateConfig = &cfsecurityEntitleAsgResource{}
 
-		Create: resourceEntitleAsgCreate,
-		Update: resourceEntitleAsgUpdate,
-		Read:   resourceEntitleAsgRead,
-		Delete: resourceEntitleAsgDelete,
-		Importer: &schema.ResourceImporter{
-			State: func(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
-				return []*schema.ResourceData{d}, nil
+func NewCFSecurityEntitleAsgResource(config *clients.Config) resource.Resource {
+	return &cfsecurityEntitleAsgResource{
+		config: config,
+	}
+}
+
+type cfsecurityEntitleAsgResourceModel struct {
+	Id      types.String `tfsdk:"id"`
+	Entitle types.Set    `tfsdk:"entitle"`
+}
+
+type entitle struct {
+	AsgID types.String `tfsdk:"asg_id"`
+	OrgID types.String `tfsdk:"org_id"`
+}
+
+func (r *cfsecurityEntitleAsgResource) Metadata(_ context.Context, req resource.MetadataRequest, resp *resource.MetadataResponse) {
+	resp.TypeName = req.ProviderTypeName + "_entitle_asg"
+}
+
+func (r *cfsecurityEntitleAsgResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+	// Prevent panic if the provider has not been configured.
+	if req.ProviderData == nil {
+		return
+	}
+
+	client, ok := req.ProviderData.(*client.Client)
+	if !ok {
+		resp.Diagnostics.AddError(
+			"Unexpected Resource Configure Type",
+			fmt.Sprintf("Expected *client.Client, got: %T. Please report this issue to the provider developers.", req.ProviderData),
+		)
+		return
+	}
+
+	r.client = client
+}
+
+func (r *cfsecurityEntitleAsgResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+	resp.Schema = schema.Schema{
+		Attributes: map[string]schema.Attribute{
+			"id": schema.StringAttribute{
+				Computed: true,
+				PlanModifiers: []planmodifier.String{
+					stringplanmodifier.UseStateForUnknown(),
+				},
 			},
 		},
-
-		Schema: map[string]*schema.Schema{
-			"entitle": &schema.Schema{
-				Type:     schema.TypeSet,
-				Optional: true,
-				Set: func(v interface{}) int {
-					elem := v.(map[string]interface{})
-					str := fmt.Sprintf("%s-%s",
-						elem["asg_id"],
-						elem["org_id"],
-					)
-					return StringHashCode(str)
-				},
-				Elem: &schema.Resource{
-					Schema: map[string]*schema.Schema{
-						"asg_id": &schema.Schema{
-							Type:     schema.TypeString,
-							Required: true,
+		Blocks: map[string]schema.Block{
+			"entitle": schema.SetNestedBlock{
+				NestedObject: schema.NestedBlockObject{
+					Attributes: map[string]schema.Attribute{
+						"asg_id": schema.StringAttribute{
+							Description: "The security group guid",
+							Required:    true,
 						},
-						"org_id": &schema.Schema{
-							Type:     schema.TypeString,
-							Required: true,
+						"org_id": schema.StringAttribute{
+							Description: "The org guid",
+							Required:    true,
 						},
 					},
 				},
@@ -51,94 +93,65 @@ func resourceEntitleAsg() *schema.Resource {
 	}
 }
 
-func resourceEntitleAsgCreate(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityEntitleAsgResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
+	var plan cfsecurityEntitleAsgResourceModel
 
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
+	// Read Terraform plan data into the model
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
 	id, err := uuid.GenerateUUID()
 	if err != nil {
-		return err
+		return
 	}
-	for _, elem := range getListOfStructs(d.Get("entitle")) {
-		err := manager.client.EntitleSecurityGroup(elem["asg_id"].(string), elem["org_id"].(string))
-		if err != nil {
-			return err
-		}
-	}
-	d.SetId(id)
-	return nil
+
+	plan.Id = types.StringValue(id)
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func resourceEntitleAsgRead(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityEntitleAsgResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
 
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
-	}
-
-	entitlements, err := manager.client.GetSecGroupEntitlements()
-	if err != nil {
-		return err
-	}
-	entitlementsTf := getListOfStructs(d.Get("entitle"))
-	finalEntitlements := intersectSlices(entitlementsTf, entitlements, func(source, item interface{}) bool {
-		entitlementTf := source.(map[string]interface{})
-		entitlement := item.(model.EntitlementSecGroup)
-		return entitlementTf["asg_id"].(string) == entitlement.SecurityGroupGUID &&
-			entitlementTf["org_id"] == entitlement.OrganizationGUID
-	})
-	return d.Set("entitle", finalEntitlements)
 }
 
-func resourceEntitleAsgUpdate(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
+func (r *cfsecurityEntitleAsgResource) Update(ctx context.Context, req resource.UpdateRequest, resp *resource.UpdateResponse) {
+	var plan, state cfsecurityEntitleAsgResourceModel
 
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
+	// Read Terraform plan data into the model
+	resp.Diagnostics.Append(req.Plan.Get(ctx, &plan)...)
+	resp.Diagnostics.Append(req.State.Get(ctx, &state)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
 
-	old, now := d.GetChange("entitle")
-	remove, add := getListMapChanges(old, now, func(source, item map[string]interface{}) bool {
-		return source["asg_id"] == item["asg_id"] &&
-			source["org_id"] == item["org_id"]
-	})
-	if len(remove) > 0 {
-		for _, r := range remove {
-			err := manager.client.RevokeSecurityGroup(r["asg_id"].(string), r["org_id"].(string))
-			if err != nil && !isNotFoundErr(err) {
-				return err
-			}
-		}
-
-	}
-	if len(add) > 0 {
-		for _, a := range add {
-			err := manager.client.EntitleSecurityGroup(a["asg_id"].(string), a["org_id"].(string))
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
+	// Save updated data into Terraform state
+	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func resourceEntitleAsgDelete(d *schema.ResourceData, meta interface{}) error {
-	manager := meta.(*Manager)
-	err := refreshTokenIfExpired(manager)
-	if err != nil {
-		return err
+func (r *cfsecurityEntitleAsgResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+
+}
+
+func (r *cfsecurityEntitleAsgResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
+}
+
+func (r *cfsecurityEntitleAsgResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
+	var configData cfsecurityEntitleAsgResourceModel
+
+	// Read Terraform configuration from the request into the model
+	resp.Diagnostics.Append(req.Config.Get(ctx, &configData)...)
+	if resp.Diagnostics.HasError() {
+		return
 	}
-	for _, elem := range getListOfStructs(d.Get("entitle")) {
-		err := manager.client.RevokeSecurityGroup(elem["asg_id"].(string), elem["org_id"].(string))
-		if err != nil && !isNotFoundErr(err) {
-			return err
+
+	var entitlements []entitle
+	configData.Entitle.ElementsAs(ctx, &entitlements, false)
+	for _, entitlement := range entitlements {
+		if entitlement.AsgID.IsNull() || entitlement.OrgID.IsNull() {
+			resp.Diagnostics.AddAttributeError(path.Root("entitle"), "Attribute Error", "\"asg_id\" and \"org_id\" fields must be provided.")
 		}
 	}
-	return nil
 }
