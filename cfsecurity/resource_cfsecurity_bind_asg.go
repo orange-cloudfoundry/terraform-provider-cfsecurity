@@ -184,7 +184,7 @@ func (r *cfsecurityBindResource) Read(ctx context.Context, req resource.ReadRequ
 		if len(secGroupsTf) == 0 {
 			resp.Diagnostics.AddError(
 				"Client Error",
-				fmt.Sprintf("No bind found in states"),
+				"No bind found in states",
 			)
 			return
 		}
