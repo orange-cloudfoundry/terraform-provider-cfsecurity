@@ -174,19 +174,32 @@ func (r *cfsecurityBindResource) Read(ctx context.Context, req resource.ReadRequ
 		return
 	}
 
+	var secGroupsTf []bind
+	state.Bind.ElementsAs(ctx, &secGroupsTf, false)
+
 	userIsAdmin, _ := r.client.CurrentUserIsAdmin()
 	// check if force and if user is not an admin
 	if state.Force.ValueBool() && !userIsAdmin {
+
+		if len(secGroupsTf) == 0 {
+			resp.Diagnostics.AddError(
+				"Client Error",
+				"No bind found in states",
+			)
+			return
+		}
+		var tfSpaceGUID = secGroupsTf[0].SpaceID.ValueString()
+
 		finalBinds := make([]bind, 0)
 		for i, secGroup := range secGroups.Resources {
 			secGroupSpaceBindings := make([]string, 0)
 			for _, space := range secGroups.Resources[i].Relationships.Running_Spaces.Data {
-				if !funk.ContainsString(secGroupSpaceBindings, space.GUID) {
+				if space.GUID == tfSpaceGUID && !funk.ContainsString(secGroupSpaceBindings, space.GUID) {
 					secGroupSpaceBindings = append(secGroupSpaceBindings, space.GUID)
 				}
 			}
 			for _, space := range secGroups.Resources[i].Relationships.Staging_Spaces.Data {
-				if !funk.ContainsString(secGroupSpaceBindings, space.GUID) {
+				if space.GUID == tfSpaceGUID && !funk.ContainsString(secGroupSpaceBindings, space.GUID) {
 					secGroupSpaceBindings = append(secGroupSpaceBindings, space.GUID)
 				}
 			}
@@ -210,9 +223,6 @@ func (r *cfsecurityBindResource) Read(ctx context.Context, req resource.ReadRequ
 		resp.Diagnostics.Append(resp.State.Set(ctx, &state)...)
 		return
 	}
-
-	var secGroupsTf []bind
-	state.Bind.ElementsAs(ctx, &secGroupsTf, false)
 
 	finalBinds := intersectSlices(secGroupsTf, secGroups.Resources, func(source, item interface{}) bool {
 		secGroupTf := source.(bind)
