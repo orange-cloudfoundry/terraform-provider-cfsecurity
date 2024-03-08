@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
+	"github.com/orange-cloudfoundry/cf-security-entitlement/v2/client"
 )
 
 // Deprecated : entitlement will be removed

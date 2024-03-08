@@ -8,7 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
 	"github.com/hashicorp/terraform-plugin-framework/datasource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/types"
-	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
+	"github.com/orange-cloudfoundry/cf-security-entitlement/v2/client"
 )
 
 type cfsecurityAsgDataSource struct {
