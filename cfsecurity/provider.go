@@ -20,7 +20,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/types"
 
 	clients "github.com/cloudfoundry-community/go-cf-clients-helper/v2"
-	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
+	"github.com/orange-cloudfoundry/cf-security-entitlement/v2/client"
 )
 
 var _ provider.Provider = &CFSecurityProvider{}

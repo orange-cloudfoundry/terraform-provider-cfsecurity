@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"reflect"
 
-	"github.com/orange-cloudfoundry/cf-security-entitlement/client"
+	"github.com/orange-cloudfoundry/cf-security-entitlement/v2/client"
 )
 
 func getListBindChanges(old []bind, new []bind) (remove []bind, add []bind) {
