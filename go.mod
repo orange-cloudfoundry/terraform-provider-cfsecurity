@@ -17,7 +17,7 @@ require (
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.7.0
 	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.12.1
-	github.com/prometheus/common v0.52.3
+	github.com/prometheus/common v0.53.0
 	github.com/thoas/go-funk v0.9.3
 )
 
