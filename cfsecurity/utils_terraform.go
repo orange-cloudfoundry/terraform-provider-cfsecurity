@@ -1,6 +1,7 @@
 package cfsecurity
 
 import (
+	"errors"
 	"net/http"
 	"reflect"
 
@@ -74,7 +75,8 @@ func isInSlice(objects interface{}, match func(object interface{}) bool) bool {
 }
 
 func isNotFoundErr(err error) bool {
-	if httpErr, ok := err.(client.CloudFoundryHTTPError); ok {
+	var httpErr client.CloudFoundryHTTPError
+	if errors.As(err, &httpErr) {
 		return httpErr.StatusCode == http.StatusNotFound
 	}
 	return false
