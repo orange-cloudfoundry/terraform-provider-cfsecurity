@@ -29,11 +29,11 @@ type cfsecurityAsgDataSourceModel struct {
 	Id   types.String `tfsdk:"id"`
 }
 
-func (d *cfsecurityAsgDataSource) Metadata(ctx context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
+func (d *cfsecurityAsgDataSource) Metadata(_ context.Context, req datasource.MetadataRequest, resp *datasource.MetadataResponse) {
 	resp.TypeName = req.ProviderTypeName + "_asg"
 }
 
-func (d *cfsecurityAsgDataSource) Schema(ctx context.Context, req datasource.SchemaRequest, resp *datasource.SchemaResponse) {
+func (d *cfsecurityAsgDataSource) Schema(_ context.Context, _ datasource.SchemaRequest, resp *datasource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 
 		Attributes: map[string]schema.Attribute{
@@ -47,7 +47,7 @@ func (d *cfsecurityAsgDataSource) Schema(ctx context.Context, req datasource.Sch
 	}
 }
 
-func (d *cfsecurityAsgDataSource) Configure(ctx context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
+func (d *cfsecurityAsgDataSource) Configure(_ context.Context, req datasource.ConfigureRequest, resp *datasource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return

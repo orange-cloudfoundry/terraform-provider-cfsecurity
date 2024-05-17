@@ -52,7 +52,7 @@ func (r *cfsecurityBindResource) Metadata(_ context.Context, req resource.Metada
 // Configure enables provider-level data or clients to be set in the
 // provider-defined DataSource type. It is separately executed for each
 // ReadDataSource RPC.
-func (r *cfsecurityBindResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *cfsecurityBindResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
@@ -70,7 +70,7 @@ func (r *cfsecurityBindResource) Configure(ctx context.Context, req resource.Con
 	r.client = clt
 }
 
-func (r *cfsecurityBindResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *cfsecurityBindResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"force": schema.BoolAttribute{
