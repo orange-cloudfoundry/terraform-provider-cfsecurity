@@ -69,18 +69,18 @@ func (m CFSecurityProviderModel) valid() (bool, CFSecurityProviderModel) {
 		m.SkipSslValidation = types.BoolValue(val)
 	}
 
-	return (m.User.ValueString() != "" &&
+	return m.User.ValueString() != "" &&
 		m.Password.ValueString() != "" &&
-		m.Endpoint.ValueString() != ""), m
+		m.Endpoint.ValueString() != "", m
 
 }
 
-func (p *CFSecurityProvider) Metadata(ctx context.Context, req provider.MetadataRequest, resp *provider.MetadataResponse) {
+func (p *CFSecurityProvider) Metadata(_ context.Context, _ provider.MetadataRequest, resp *provider.MetadataResponse) {
 	resp.TypeName = "cfsecurity"
 	resp.Version = p.version
 }
 
-func (p *CFSecurityProvider) Schema(ctx context.Context, req provider.SchemaRequest, resp *provider.SchemaResponse) {
+func (p *CFSecurityProvider) Schema(_ context.Context, _ provider.SchemaRequest, resp *provider.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"cf_api_url": schema.StringAttribute{
@@ -173,14 +173,14 @@ func (p *CFSecurityProvider) Configure(ctx context.Context, req provider.Configu
 	resp.ResourceData = data.client
 }
 
-func (p *CFSecurityProvider) Resources(ctx context.Context) []func() resource.Resource {
+func (p *CFSecurityProvider) Resources(context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		func() resource.Resource { return NewCFSecurityEntitleAsgResource(p.config) },
 		func() resource.Resource { return NewCFSecurityBindResource(p.config) },
 	}
 }
 
-func (p *CFSecurityProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
+func (p *CFSecurityProvider) DataSources(context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		func() datasource.DataSource { return NewCFSecurityAsgDataSource(p.config) },
 	}

@@ -46,13 +46,13 @@ func (r *cfsecurityEntitleAsgResource) Metadata(_ context.Context, req resource.
 	resp.TypeName = req.ProviderTypeName + "_entitle_asg"
 }
 
-func (r *cfsecurityEntitleAsgResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *cfsecurityEntitleAsgResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	clt, ok := req.ProviderData.(*client.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
@@ -61,10 +61,10 @@ func (r *cfsecurityEntitleAsgResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	r.client = client
+	r.client = clt
 }
 
-func (r *cfsecurityEntitleAsgResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *cfsecurityEntitleAsgResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"id": schema.StringAttribute{
@@ -112,7 +112,7 @@ func (r *cfsecurityEntitleAsgResource) Create(ctx context.Context, req resource.
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func (r *cfsecurityEntitleAsgResource) Read(ctx context.Context, req resource.ReadRequest, resp *resource.ReadResponse) {
+func (r *cfsecurityEntitleAsgResource) Read(context.Context, resource.ReadRequest, *resource.ReadResponse) {
 
 }
 
@@ -130,7 +130,7 @@ func (r *cfsecurityEntitleAsgResource) Update(ctx context.Context, req resource.
 	resp.Diagnostics.Append(resp.State.Set(ctx, &plan)...)
 }
 
-func (r *cfsecurityEntitleAsgResource) Delete(ctx context.Context, req resource.DeleteRequest, resp *resource.DeleteResponse) {
+func (r *cfsecurityEntitleAsgResource) Delete(context.Context, resource.DeleteRequest, *resource.DeleteResponse) {
 
 }
 

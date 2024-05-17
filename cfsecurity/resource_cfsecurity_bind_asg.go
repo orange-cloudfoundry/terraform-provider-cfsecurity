@@ -52,13 +52,13 @@ func (r *cfsecurityBindResource) Metadata(_ context.Context, req resource.Metada
 // Configure enables provider-level data or clients to be set in the
 // provider-defined DataSource type. It is separately executed for each
 // ReadDataSource RPC.
-func (r *cfsecurityBindResource) Configure(ctx context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
+func (r *cfsecurityBindResource) Configure(_ context.Context, req resource.ConfigureRequest, resp *resource.ConfigureResponse) {
 	// Prevent panic if the provider has not been configured.
 	if req.ProviderData == nil {
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	clt, ok := req.ProviderData.(*client.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
@@ -67,10 +67,10 @@ func (r *cfsecurityBindResource) Configure(ctx context.Context, req resource.Con
 		return
 	}
 
-	r.client = client
+	r.client = clt
 }
 
-func (r *cfsecurityBindResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {
+func (r *cfsecurityBindResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *resource.SchemaResponse) {
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"force": schema.BoolAttribute{
@@ -342,7 +342,7 @@ func (r *cfsecurityBindResource) ImportState(ctx context.Context, req resource.I
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
 
-// Called during terraform validate through ValidateResourceConfig RPC
+// ValidateConfig Called during terraform validate through ValidateResourceConfig RPC
 // Validates the logic in the application block in the Schema
 func (r *cfsecurityBindResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
 	var configData cfsecurityBindResourceModel
