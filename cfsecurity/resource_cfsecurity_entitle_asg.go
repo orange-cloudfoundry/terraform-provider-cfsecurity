@@ -52,7 +52,7 @@ func (r *cfsecurityEntitleAsgResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	clt, ok := req.ProviderData.(*client.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
@@ -61,7 +61,7 @@ func (r *cfsecurityEntitleAsgResource) Configure(ctx context.Context, req resour
 		return
 	}
 
-	r.client = client
+	r.client = clt
 }
 
 func (r *cfsecurityEntitleAsgResource) Schema(ctx context.Context, req resource.SchemaRequest, resp *resource.SchemaResponse) {

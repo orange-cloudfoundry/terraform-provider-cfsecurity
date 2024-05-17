@@ -53,7 +53,7 @@ func (d *cfsecurityAsgDataSource) Configure(ctx context.Context, req datasource.
 		return
 	}
 
-	client, ok := req.ProviderData.(*client.Client)
+	clt, ok := req.ProviderData.(*client.Client)
 	if !ok {
 		resp.Diagnostics.AddError(
 			"Unexpected Resource Configure Type",
@@ -62,7 +62,7 @@ func (d *cfsecurityAsgDataSource) Configure(ctx context.Context, req datasource.
 		return
 	}
 
-	d.client = client
+	d.client = clt
 }
 
 func (d *cfsecurityAsgDataSource) Read(ctx context.Context, req datasource.ReadRequest, resp *datasource.ReadResponse) {
