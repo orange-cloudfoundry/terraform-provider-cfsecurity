@@ -69,9 +69,9 @@ func (m CFSecurityProviderModel) valid() (bool, CFSecurityProviderModel) {
 		m.SkipSslValidation = types.BoolValue(val)
 	}
 
-	return (m.User.ValueString() != "" &&
+	return m.User.ValueString() != "" &&
 		m.Password.ValueString() != "" &&
-		m.Endpoint.ValueString() != ""), m
+		m.Endpoint.ValueString() != "", m
 
 }
 

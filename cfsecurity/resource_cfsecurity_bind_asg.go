@@ -342,7 +342,7 @@ func (r *cfsecurityBindResource) ImportState(ctx context.Context, req resource.I
 	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
 
-// Called during terraform validate through ValidateResourceConfig RPC
+// ValidateConfig Called during terraform validate through ValidateResourceConfig RPC
 // Validates the logic in the application block in the Schema
 func (r *cfsecurityBindResource) ValidateConfig(ctx context.Context, req resource.ValidateConfigRequest, resp *resource.ValidateConfigResponse) {
 	var configData cfsecurityBindResourceModel
