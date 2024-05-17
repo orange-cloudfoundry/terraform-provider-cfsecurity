@@ -1,8 +1,6 @@
 module github.com/orange-cloudfoundry/terraform-provider-cfsecurity
 
-go 1.22.0
-
-toolchain go1.22.3
+go 1.22.3
 
 // replace github.com/codahale/hdrhistogram => github.com/HdrHistogram/hdrhistogram-go v0.0.0-20210305173142-35c7773a578a
 replace github.com/imdario/mergo => dario.cat/mergo v0.3.16
@@ -18,7 +16,7 @@ require (
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.5.1
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.8.0
-	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.13.1
+	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.14.1
 	github.com/prometheus/common v0.53.0
 	github.com/thoas/go-funk v0.9.3
 )
