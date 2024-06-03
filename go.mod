@@ -12,8 +12,8 @@ exclude (
 )
 
 require (
-	code.cloudfoundry.org/cli v0.0.0-20240517012842-1c52a877d15c
-	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.5.1
+	code.cloudfoundry.org/cli v0.0.0-20240524142151-a2a685b5ea6e
+	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.6.1
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.8.0
 	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.14.1
@@ -22,14 +22,13 @@ require (
 )
 
 require (
-	code.cloudfoundry.org/bytefmt v0.0.0-20240510175427-fd0528cc37f1 // indirect
+	code.cloudfoundry.org/bytefmt v0.0.0-20240524171005-f1d9d5c55b92 // indirect
 	code.cloudfoundry.org/cfnetworking-cli-api v0.0.0-20190103195135-4b04f26287a6 // indirect
-	code.cloudfoundry.org/cli-plugin-repo v0.0.0-20240513204118-c2a9e6622bbd // indirect
 	code.cloudfoundry.org/clock v1.1.0 // indirect
 	code.cloudfoundry.org/go-log-cache/v2 v2.0.7 // indirect
 	code.cloudfoundry.org/go-loggregator/v9 v9.2.1 // indirect
 	code.cloudfoundry.org/jsonry v1.1.4 // indirect
-	code.cloudfoundry.org/tlsconfig v0.0.0-20240516170203-d50b3d56ba06 // indirect
+	code.cloudfoundry.org/tlsconfig v0.0.0-20240522170710-79df114af82a // indirect
 	code.cloudfoundry.org/ykk v0.0.0-20170424192843-e4df4ce2fd4d // indirect
 	github.com/Azure/go-ansiterm v0.0.0-20230124172434-306776ec8161 // indirect
 	github.com/SermoDigital/jose v0.9.2-0.20161205224733-f6df55f235c2 // indirect
@@ -38,11 +37,11 @@ require (
 	github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f // indirect
 	github.com/charlievieth/fs v0.0.3 // indirect
 	github.com/cloudfoundry/bosh-cli v6.4.1+incompatible // indirect
-	github.com/cloudfoundry/bosh-utils v0.0.465 // indirect
+	github.com/cloudfoundry/bosh-utils v0.0.466 // indirect
 	github.com/cppforlife/go-patch v0.2.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/fatih/color v1.17.0 // indirect
-	github.com/go-logr/logr v1.4.1 // indirect
+	github.com/go-logr/logr v1.4.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.4 // indirect
 	github.com/google/gofuzz v1.2.0 // indirect
@@ -83,8 +82,8 @@ require (
 	golang.org/x/term v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20240515191416-fc5f0ca64291 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20240515191416-fc5f0ca64291 // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20240521202816-d264139d666e // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20240521202816-d264139d666e // indirect
 	google.golang.org/grpc v1.64.0 // indirect
 	google.golang.org/protobuf v1.34.1 // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
