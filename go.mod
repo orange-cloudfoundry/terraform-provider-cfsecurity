@@ -13,7 +13,7 @@ exclude (
 
 require (
 	code.cloudfoundry.org/cli v0.0.0-20240524142151-a2a685b5ea6e
-	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.6.1
+	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.6.2
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.9.0
 	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.14.1
