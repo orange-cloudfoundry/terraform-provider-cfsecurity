@@ -1,6 +1,6 @@
 module github.com/orange-cloudfoundry/terraform-provider-cfsecurity
 
-go 1.22.3
+go 1.22.4
 
 // replace github.com/codahale/hdrhistogram => github.com/HdrHistogram/hdrhistogram-go v0.0.0-20210305173142-35c7773a578a
 replace github.com/imdario/mergo => dario.cat/mergo v0.3.16
