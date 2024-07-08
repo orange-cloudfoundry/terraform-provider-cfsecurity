@@ -16,7 +16,7 @@ require (
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.6.3
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.9.0
-	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.14.1
+	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.15.0
 	github.com/prometheus/common v0.55.0
 	github.com/thoas/go-funk v0.9.3
 )
