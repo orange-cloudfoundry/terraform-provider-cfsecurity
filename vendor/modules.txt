@@ -158,7 +158,7 @@ github.com/hashicorp/go-plugin/runner
 # github.com/hashicorp/go-uuid v1.0.3
 ## explicit
 github.com/hashicorp/go-uuid
-# github.com/hashicorp/terraform-plugin-framework v1.14.0
+# github.com/hashicorp/terraform-plugin-framework v1.14.1
 ## explicit; go 1.22.0
 github.com/hashicorp/terraform-plugin-framework/attr
 github.com/hashicorp/terraform-plugin-framework/attr/xattr
