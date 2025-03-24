@@ -274,7 +274,7 @@ github.com/munnerz/goautoneg
 # github.com/oklog/run v1.1.0
 ## explicit; go 1.13
 github.com/oklog/run
-# github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.21.0
+# github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.21.1
 ## explicit; go 1.23.4
 github.com/orange-cloudfoundry/cf-security-entitlement/v2/client
 # github.com/pkg/errors v0.9.1
