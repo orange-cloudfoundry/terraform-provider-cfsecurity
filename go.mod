@@ -16,7 +16,7 @@ require (
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.7.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.14.1
-	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.21.1
+	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.23.0
 	github.com/prometheus/common v0.63.0
 	github.com/thoas/go-funk v0.9.3
 )
@@ -58,7 +58,7 @@ require (
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lunixbochs/vtclean v1.0.0 // indirect
-	github.com/mattn/go-colorable v0.1.13 // indirect
+	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/mattn/go-runewidth v0.0.16 // indirect
 	github.com/mitchellh/go-testing-interface v1.14.1 // indirect
