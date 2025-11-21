@@ -104,6 +104,10 @@ github.com/bmizerany/pat
 # github.com/charlievieth/fs v0.0.3
 ## explicit; go 1.18
 github.com/charlievieth/fs
+# github.com/clipperhouse/uax29/v2 v2.2.0
+## explicit; go 1.18
+github.com/clipperhouse/uax29/v2/graphemes
+github.com/clipperhouse/uax29/v2/internal/iterators
 # github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.11.0
 ## explicit; go 1.25.0
 github.com/cloudfoundry-community/go-cf-clients-helper/v2
@@ -257,8 +261,8 @@ github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.20
 ## explicit; go 1.15
 github.com/mattn/go-isatty
-# github.com/mattn/go-runewidth v0.0.16
-## explicit; go 1.9
+# github.com/mattn/go-runewidth v0.0.19
+## explicit; go 1.20
 github.com/mattn/go-runewidth
 # github.com/mitchellh/go-testing-interface v1.14.1
 ## explicit; go 1.14
@@ -279,7 +283,7 @@ github.com/munnerz/goautoneg
 # github.com/oklog/run v1.2.0
 ## explicit; go 1.20
 github.com/oklog/run
-# github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.36.0
+# github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.36.2
 ## explicit; go 1.25.0
 github.com/orange-cloudfoundry/cf-security-entitlement/v2/client
 # github.com/pkg/errors v0.9.1
@@ -288,9 +292,6 @@ github.com/pkg/errors
 # github.com/prometheus/common v0.67.3
 ## explicit; go 1.24.0
 github.com/prometheus/common/version
-# github.com/rivo/uniseg v0.4.7
-## explicit; go 1.18
-github.com/rivo/uniseg
 # github.com/sabhiram/go-gitignore v0.0.0-20180611051255-d3107576ba94
 ## explicit
 github.com/sabhiram/go-gitignore
