@@ -17,7 +17,7 @@ require (
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.11.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.16.1
-	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.36.3
+	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.36.4
 	github.com/prometheus/common v0.67.4
 	github.com/thoas/go-funk v0.9.3
 )
@@ -37,7 +37,8 @@ require (
 	github.com/bmatcuk/doublestar v1.3.4 // indirect
 	github.com/bmizerany/pat v0.0.0-20210406213842-e4b6760bdd6f // indirect
 	github.com/charlievieth/fs v0.0.3 // indirect
-	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
+	github.com/clipperhouse/stringish v0.1.1 // indirect
+	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/cloudfoundry/bosh-cli v6.4.1+incompatible // indirect
 	github.com/cloudfoundry/bosh-utils v0.0.554 // indirect
 	github.com/cppforlife/go-patch v0.2.0 // indirect
