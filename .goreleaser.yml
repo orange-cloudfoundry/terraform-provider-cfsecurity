@@ -1,3 +1,5 @@
+version: 2
+
 before:
   hooks:
     - go mod download
@@ -35,10 +37,13 @@ builds:
         goarch: arm
       - goos: openbsd
         goarch: arm64
+      - goos: windows
+        goarch: arm
     binary: '{{ .ProjectName }}_v{{ .Version }}'
 
 archives:
-  - format: zip
+  - formats: 
+      - zip
     name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
 
 checksum:
@@ -48,3 +53,11 @@ checksum:
 signs:
   - artifacts: checksum
     args: ["--batch", "-u", "{{ .Env.GPG_FINGERPRINT }}", "--output", "${signature}", "--detach-sign", "${artifact}"]
+
+
+release:
+  github:
+    owner: orange-cloudfoundry
+    name: terraform-provider-cfsecurity
+  prerelease: auto
+  name_template: '{{.Tag}}'

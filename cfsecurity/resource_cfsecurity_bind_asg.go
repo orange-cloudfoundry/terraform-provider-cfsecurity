@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"code.cloudfoundry.org/cli/api/cloudcontroller/ccv3"
+	"code.cloudfoundry.org/cli/v8/api/cloudcontroller/ccv3"
 
 	clients "github.com/cloudfoundry-community/go-cf-clients-helper/v2"
 	"github.com/hashicorp/go-uuid"
