@@ -18,7 +18,7 @@ require (
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.13.0
 	github.com/hashicorp/go-uuid v1.0.3
 	github.com/hashicorp/terraform-plugin-framework v1.17.0
-	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.38.0
+	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.38.1
 	github.com/prometheus/common v0.67.5
 	github.com/thoas/go-funk v0.9.3
 )
@@ -71,7 +71,7 @@ require (
 	github.com/oklog/run v1.2.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/sabhiram/go-gitignore v0.0.0-20180611051255-d3107576ba94 // indirect
-	github.com/sirupsen/logrus v1.9.3 // indirect
+	github.com/sirupsen/logrus v1.9.4 // indirect
 	github.com/spf13/pflag v1.0.10 // indirect
 	github.com/tedsuo/rata v1.0.1-0.20170830210128-07d200713958 // indirect
 	github.com/vito/go-interact v1.0.0 // indirect
