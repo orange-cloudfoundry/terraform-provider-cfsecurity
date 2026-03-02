@@ -17,7 +17,7 @@ require (
 	code.cloudfoundry.org/cli/v8 v8.17.0
 	github.com/cloudfoundry-community/go-cf-clients-helper/v2 v2.13.0
 	github.com/hashicorp/go-uuid v1.0.3
-	github.com/hashicorp/terraform-plugin-framework v1.17.0
+	github.com/hashicorp/terraform-plugin-framework v1.18.0
 	github.com/orange-cloudfoundry/cf-security-entitlement/v2 v2.38.2
 	github.com/prometheus/common v0.67.5
 	github.com/thoas/go-funk v0.9.3
@@ -51,7 +51,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
 	github.com/hashicorp/go-plugin v1.7.0 // indirect
-	github.com/hashicorp/terraform-plugin-go v0.29.0 // indirect
+	github.com/hashicorp/terraform-plugin-go v0.30.0 // indirect
 	github.com/hashicorp/terraform-plugin-log v0.10.0 // indirect
 	github.com/hashicorp/terraform-registry-address v0.4.0 // indirect
 	github.com/hashicorp/terraform-svchost v0.1.1 // indirect
@@ -88,7 +88,7 @@ require (
 	golang.org/x/time v0.14.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251222181119-0a764e51fe1b // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20251222181119-0a764e51fe1b // indirect
-	google.golang.org/grpc v1.78.0 // indirect
+	google.golang.org/grpc v1.79.1 // indirect
 	google.golang.org/protobuf v1.36.11 // indirect
 	gopkg.in/cheggaaa/pb.v1 v1.0.28 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
